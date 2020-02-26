@@ -30,7 +30,12 @@ if __name__ == "__main__":
 
     device_name = tf.test.gpu_device_name()
     if device_name != '/device:GPU:0':
+        MLP_model_name = 'models/MLP_model_CPU.h5'
+        convnet_model_name = 'models/convnet_model_CPU.h5'
         raise SystemError('GPU device not found')
+    else :
+        MLP_model_name = 'models/MLP_model_GPU.h5'
+        convnet_model_name = 'models/convnet_model_GPU.h5'
     print('Found GPU at: {}'.format(device_name))
 
     fashion_mnist = keras.datasets.fashion_mnist
@@ -40,8 +45,8 @@ if __name__ == "__main__":
     train_images = train_images.reshape((train_images.shape[0], 28, 28, 1))
     test_images = test_images.reshape((test_images.shape[0], 28, 28, 1))
 
-    model_MLP = tf.keras.models.load_model('models/MLP_model_GPU.h5')
-    model_conv_net = tf.keras.models.load_model('models/convnet_model_GPU.h5')
+    model_MLP = tf.keras.models.load_model(MLP_model_name)
+    model_conv_net = tf.keras.models.load_model(convnet_model_name)
 
     loss, gt, pred = test(model_MLP, test_images, test_labels)
     with open("multi-layer-net.txt", 'w') as f:
